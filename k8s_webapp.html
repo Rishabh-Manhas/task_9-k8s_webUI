@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<head>
+    
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta http-equiv="Cache-control" content="public">
+    <title> Kubernetes Web UI</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+</head>
+
+   
+<body style="text-align: center;background-color: #ffeecc;">
+    <img id="img1" src="./webapp_files/nyh.webp" alt="k8s" width="1260" height="1690">    
+    <img id="img2" src="./webapp_files/effect.gif" alt="k8s" width="1260" height="1690">    
+    
+    <div id="h1"><h1  style="font-size: 40px";>KUBERNETES WEB UI </h1></div>
+
+
+<div id="f1";> 
+            <h1  style="font-size: 30px";>KUBERNETES MENU </h1>
+            <h2>Enter the required information</h2>
+    Enter Image Name:<br/><input id="d1" type="text"  name="x" /><br/><br/>
+    Enter Pod Name:<br/><input id="d2" type="text"  name="y" /><br/><br/>
+    Enter Deployment Name:<br/><input id="d4" type="text"  name="d" /><br/><br/>
+    Enter Replica Number:<br/><input id="d3" type="number"  name="z" /><br/><br/>
+    
+    
+    <button class="click button1" onclick="launch();">LAUNCH POD</button>
+    <button class="click button2" onclick="deploy();">RUN DEPLOYMENT</button>
+    <button class="click button3" onclick="expose();">EXPOSE SERVICES</button>
+    <button class="click button4" onclick="scale();">SCALE REPLICAS</button>
+    <button class="click button6" onclick="del_pods();">DELETE POD</button>
+    <button class="click button7" onclick="del_deps();">DELETE DEPLOYMENT</button>
+    <button class="click button8" onclick="list_pods();">LIST ALL PODS</button>
+    <button class="click button9" onclick="list_deps();">LIST ALL DEPLOYMENTS</button>
+
+
+
+
+
+</div>
+<pre><div style="font-size:13px" , id="out1"><b>OUTPUT BOX</b> </div></pre>
+
+
+<div id="f3";>
+   <h2 style="color: black;">Kubernetes Terminal</h2>
+   <b> k8s@localhost:~# </b><input id="input"><button class="run button6" onclick="kube();">RUN</button>
+   
+</div>
+<pre><div style="font-size:13px" ,="" id="out3";><b>TERMINAL OUTPUT</b> </div></pre>
+
+
+<div id="border"><h1 > </h1></div>
+
+
+<script>
+
+    
+     function launch() {
+         var img=document.getElementById("d1").value;
+         var cont=document.getElementById("d2").value;
+        var xhr=new XMLHttpRequest();
+        xhr.open("GET","http://192.168.56.101/cgi-bin/launch.py?x="+img+"&y="+cont,"true")
+        xhr.send();
+        xhr.onload = function()
+        {
+         document.getElementById('out1').innerHTML = xhr.responseText; 
+
+        }
+        
+     }
+     
+      function deploy() {
+        var img=document.getElementById("d1").value;
+        var cont=document.getElementById("d4").value;
+        var xhr=new XMLHttpRequest();
+        xhr.open("GET","http://192.168.56.101/cgi-bin/dep.py?x="+img+"&d="+cont,"true")
+        xhr.send();
+        xhr.onload = function()
+        {
+         document.getElementById("out1").innerHTML = xhr.responseText; 
+
+        }
+           
+   
+      }
+function expose() {
+         var cont=document.getElementById("d4").value;
+         var xhr=new XMLHttpRequest();
+         xhr.open("GET","http://192.168.56.101/cgi-bin/exp.py?d="+cont,"true")
+        xhr.send();
+        xhr.onload = function()
+        {
+         document.getElementById('out1').innerHTML = xhr.responseText; 
+
+        }
+           
+   
+      }
+function scale() {
+        var cont=document.getElementById("d4").value;
+        var rep=document.getElementById("d3").value;
+        var xhr=new XMLHttpRequest();
+        xhr.open("GET","http://192.168.56.101/cgi-bin/rep.py?d= "+cont+" &z="+rep,"true")
+        xhr.send();
+        xhr.onload = function()
+        {
+         document.getElementById("out1").innerHTML = xhr.responseText; 
+
+        }
+           
+   
+      }
+function kube() {
+	
+
+ 
+  var i = document.getElementById("input").value
+  var stat = "0"
+  var final = ""
+  if (((i.includes("deployments")) || (i.includes("deploy")) || (i.includes("deployment"))) && ((i.includes("create")) || (i.includes("generate")) || (i.includes("build")))) {
+    var image = prompt("Enter the name of image: ")
+	var deployment_name = prompt("Enter the name of Deployment: ")
+	var stat = "1"
+	var final = stat + " " + image + " " + deployment_name 
+	}
+
+  else if (((i.includes("pods")) || (i.includes("pod"))) && ((i.includes("create")) || (i.includes("generate")) || (i.includes("build")))) {
+	var image = prompt("Enter the name of image: ")
+	var pod_name = prompt("Enter the name of pod: ")
+	var stat = "2"
+	var final = stat + " " + image + " " + pod_name
+	
+	}
+
+  else if (((i.includes("pods")) || (i.includes("pod"))) && ((i.includes("delete")) || (i.includes("remove")) || (i.includes("detach")))) {
+	var pod_name = prompt("Enter the name of pod: ")
+	var stat = "3"
+	var final = stat + " " + pod_name
+	
+	}
+
+  else if (((i.includes("deployments")) || (i.includes("deploy")) || (i.includes("deployment"))) && ((i.includes("delete")) || (i.includes("remove")) || (i.includes("detach")))) {
+	var deployment_name = prompt("Enter the name of Deployment: ")
+	var stat = "4"
+	var final = stat + " " + deployment_name
+	}
+
+  else if (((i.includes("deployments")) || (i.includes("deploy")) || (i.includes("deployment"))) && ((i.includes("expose"))  || (i.includes("display")))) {
+	var deployment_name = prompt("Enter the name of Deployment: ")
+	var port_no = prompt("Enter the port number where you want to export your deployment: ")
+	var expose_type = prompt(" 1. ClusterIP \n 2.ExternalNames \n 3.LoadBalancer 4.NodePort \n Enter the type which you want to export ")
+	var stat = "5"
+	var final = stat + " " + deployment_name + " " + port_no + " " + expose_type
+	}
+
+  else if (((i.includes("deployments")) || (i.includes("deploy")) || (i.includes("deployment"))) && ((i.includes("scale")) || (i.includes("increase")) || (i.includes("decrease")) || (i.includes("scale up")) || (i.includes("scale down")))) {
+	var deployment_name = prompt("Enter the name of Deployment: ")
+	var replica = prompt("Enter number of replicas: ")
+	var stat = "6"
+	var final = stat + " " + deployment_name + " " + replica
+	}
+
+  else if (((i.includes("pods")) || (i.includes("pod"))) && ((i.includes("show")) || (i.includes("get")) || (i.includes("list")))) {
+	var stat = "7"
+	var final = stat 
+	
+	}
+
+  else if (((i.includes("deployments"))|| (i.includes("deployment")) || (i.includes("deploy"))) && ((i.includes("show")) || (i.includes("get")) || (i.includes("list")))) {
+	var stat = "8"
+	var final = stat 
+	
+	}
+  else if (((i.includes("service")) || (i.includes("services")) || (i.includes("svc"))) && ((i.includes("show")) || (i.includes("get")) || (i.includes("list")))) {
+	var stat = "9"
+	var final = stat
+	
+	}
+
+  else if (((i.includes("all")) || (i.includes("everything"))) && ((i.includes("delete")) || (i.includes("remove")) || (i.includes("destroy")))) {
+	var stat = "10"
+	var final = stat 
+	}
+
+  else {
+	var stat = "11"
+	var final = stat 
+	}
+
+	
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://192.168.56.101/cgi-bin/terminal.py?k= " + final, "true")
+  xhr.send();
+  
+  xhr.onload = function ()
+	{
+	document.getElementById('out3').innerHTML = xhr.responseText; 
+        }
+	
+  
+}
+
+
+	
+       
+function del_pods() {
+	var cont=document.getElementById("d2").value;
+	var xhr = new XMLHttpRequest();
+	xhr.open ( "GET", "http://192.168.56.101/cgi-bin/del_pod.py?y= "+cont,"true")
+	xhr.send();
+
+	xhr.onload = function ()
+	{
+	document.getElementById('out1').innerHTML = xhr.responseText; 
+        }
+	
+       }
+function del_deps() {
+	var cont=document.getElementById("d4").value;
+	var xhr = new XMLHttpRequest();
+	xhr.open ( "GET", "http://192.168.56.101/cgi-bin/del_dep.py?d= "+cont,"true")
+	xhr.send();
+
+	xhr.onload = function ()
+	{
+	document.getElementById('out1').innerHTML = xhr.responseText; 
+        }
+	
+       }
+
+function list_pods() {
+	var xhr = new XMLHttpRequest();
+	xhr.open ( "GET", "http://192.168.56.101/cgi-bin/list.py","true")
+	xhr.send();
+
+	xhr.onload = function ()
+	{
+	document.getElementById('out1').innerHTML = xhr.responseText; 
+        }
+	
+       }
+function list_deps() {
+	var xhr = new XMLHttpRequest();
+	xhr.open ( "GET", "http://192.168.56.101/cgi-bin/list_dep.py","true")
+	xhr.send();
+
+	xhr.onload = function ()
+	{
+	document.getElementById('out1').innerHTML = xhr.responseText; 
+        }
+	
+       }
+
+
+</script> 
+<style>
+div#h1{
+        text-align:center;
+        font-family:"Lucida Console", Monaco, monospace;
+        color: #ffffff;
+        background: rgba( 102, 0, 51, 1);
+        box-shadow: 0 8px 32px 0 rgba( 255, 255, 255, 0 );
+        backdrop-filter: blur( 1.5px );
+        -webkit-backdrop-filter: blur( 0.5px );
+        border-radius: 5px;
+        border: 1px solid rgb(0, 0, 128);
+        width: 1280px;
+        height: 70px ;
+        position: absolute;
+        left : 0px;
+        
+        top: 0px;
+}
+
+div#f1 {
+     
+    background: rgba( 255, 255, 255, 0.50);
+    box-shadow: 0 8px 32px 0 rgba( 255, 0, 0, 0 );
+    backdrop-filter: blur( 1.5px );
+    -webkit-backdrop-filter: blur( 0.5px );
+    border-radius: 5px;
+    border: 1px solid rgba( 255, 255, 255, 0.1 );
+    
+        font-family:"Lucida Console", Monaco, monospace;
+        font-size : 18px;
+        width: 900px;
+        height:600px;
+        position: absolute;
+        left: 180px;
+        top : 770px;
+        }
+div#out1 {
+     
+    background: rgba( 200, 132, 132, 0.50);
+    box-shadow: 0 8px 32px 0 rgba( 255, 0, 0, 0 );
+    backdrop-filter: blur( 1.5px );
+    -webkit-backdrop-filter: blur( 0.5px );
+    border-radius: 5px;
+    border: 1px solid rgba( 255, 255, 255, 0.1 );
+        font-family:"Lucida Console", Monaco, monospace;
+        font-size : 18px;
+        width: 1000px;
+        height:300px;
+        position: absolute;
+        left: 140px;
+        top : 1380px;
+        }
+
+div#f3 {
+     
+    background: rgba( 255, 255, 255, 0.50);
+    box-shadow: 0 8px 32px 0 rgba( 255, 0, 0, 0 );
+    backdrop-filter: blur( 1.5px );
+    -webkit-backdrop-filter: blur( 0.5px );
+    border-radius: 5px;
+    border: 1px solid rgba( 255, 255, 255, 0.1 );
+        font-family:"Lucida Console", Monaco, monospace;
+        font-size : 18px;
+        width: 400px;
+        height:150px;
+        position: absolute;
+        left: 430px;
+        top : 120px;
+        }
+div#out3 {
+     
+    background: rgba( 200, 132, 132, 0.50);
+    box-shadow: 0 8px 32px 0 rgba( 255, 255, 255, 0 );
+    backdrop-filter: blur( 1.5px );
+    -webkit-backdrop-filter: blur( 0.5px );
+    border-radius: 5px;
+    border: 1px solid rgba( 255, 255, 255, 0.1 );
+    display: inline-block;
+        font-family:"Lucida Console", Monaco, monospace;
+        font-size : 18px;
+        width: 1000px;
+        height: 300px;
+        position: absolute;
+        left: 120px;
+        top : 290px;
+        }
+
+div#border {
+        
+        
+        background: rgba( 0, 0, 0, 1);
+        box-shadow: 0 8px 32px 0 rgba( 255, 255, 255, 0 );
+        
+  
+        
+        width: 1280px;
+        height: 20px ;
+        position: absolute;
+        left : 0px;
+        top: 1700px;
+  
+      }
+.click {
+  background-color: #4CAF50; 
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+.run {
+  background-color:  #f44336;
+  border: none;
+  color: white;
+  padding: 2px 4px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 13px;
+  margin: 2px 1px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+.button5 {
+  background-color: white; 
+  color: blue; 
+  border: 2px solid #f44336;
+  border-radius: 3px;
+}
+.button5:hover {
+  background-color: #f44336;
+  color: white;
+}
+
+.button1 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+  border-radius: 12px;
+}
+
+.button1:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.button2 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #008CBA;
+  border-radius: 12px;
+}
+
+.button2:hover {
+  background-color: #008CBA;
+  color: white;
+}
+
+.button3 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #f44336;
+  border-radius: 12px;
+}
+
+.button3:hover {
+  background-color: #f44336;
+  color: white;
+}
+
+.button4 {
+  background-color: white;
+  color: black;
+  border: 2px solid #ffff00;
+  border-radius: 12px;
+}
+
+.button4:hover {background-color: #ffff00;}
+
+.button6 {
+  background-color: white;
+  color: red;
+  border: 2px solid #000000;
+  border-radius: 12px;
+}
+
+.button6:hover {background-color: #000000;}
+
+.button7 {
+  background-color: white;
+  color: red;
+  border: 2px solid #ffcc99;
+  border-radius: 12px;
+}
+
+.button7:hover {background-color: #ffcc99;}
+.button8 {
+  background-color: white;
+  color: red;
+  border: 2px solid #00ffff;
+  border-radius: 12px;
+}
+
+.button8:hover {background-color: #00ffff;}
+.button9 {
+  background-color: white;
+  color: red;
+  border: 2px solid #993399;
+  border-radius: 12px;
+}
+
+.button9:hover {background-color: #993399;}
+
+img#img1 {
+
+    position: absolute;
+    left: 0;
+    top:100;
+}
+img#img2 {
+
+    position: absolute;
+    left: 0;
+    top:100;
+}
+
+    
+</style> 
+</body>
+</html>
